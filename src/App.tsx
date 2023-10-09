@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import TodoList, { TaskType } from "./TodoList";
 import { v1 } from "uuid";
+import AddItemForm from "./AddItemForm";
 
 export type FilterValueType = "all" | "completed" | "active";
 
@@ -9,6 +10,10 @@ type TodoListType = {
   id: string;
   title: string;
   filter: FilterValueType;
+};
+
+type TasksStateType = {
+  [key: string]: Array<TaskType>;
 };
 
 function App() {
@@ -20,7 +25,7 @@ function App() {
     { id: todoListId2, title: "What to buy", filter: "all" },
   ]);
 
-  const [tasksObj, setTasks] = useState({
+  const [tasksObj, setTasks] = useState<TasksStateType>({
     [todoListId1]: [
       { id: v1(), title: "HTML&CSS", isDone: true },
       { id: v1(), title: "JS", isDone: true },
@@ -78,9 +83,38 @@ function App() {
     }
   }
 
+  function addTodoList(title: string) {
+    const todoList: TodoListType = { id: v1(), title, filter: "all" };
+    setTodoList([todoList, ...todoLists]);
+    setTasks({ ...tasksObj, [todoList.id]: [] });
+  }
+
+  function cahngeNewTitleTodoList(todoListId: string, newTitle: string) {
+    const todoList = todoLists.find((todoList) => todoList.id === todoListId);
+    if (todoList) {
+      todoList.title = newTitle;
+    }
+
+    setTodoList([...todoLists]);
+  }
+
+  function onChangeStatusHandler(
+    taskId: string,
+    newTitle: string,
+    todoListId: string
+  ) {
+    const tasks = tasksObj[todoListId];
+    const task = tasks.find((t) => t.id === taskId);
+
+    if (task) {
+      task.title = newTitle;
+      setTasks({ ...tasksObj });
+    }
+  }
+
   return (
     <div className="App">
-      <input type="text" /> <button>X</button>
+      <AddItemForm addItem={(title) => addTodoList(title)} />
       {todoLists.map((tl) => {
         let taskForTodoList = tasksObj[tl.id];
         if (tl.filter === "completed") {
@@ -102,6 +136,8 @@ function App() {
             changeStatus={changeStatus}
             filter={tl.filter}
             removeTodoList={removeTodoList}
+            onChangeTaskTitle={onChangeStatusHandler}
+            cahngeNewTitleTodoList={cahngeNewTitleTodoList}
           />
         );
       })}

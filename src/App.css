@@ -1,10 +1,12 @@
 .App {
   padding: 50px;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .App div {
   margin-right: 59px;
+  margin-bottom: 10px;
 }
 
 .error {
