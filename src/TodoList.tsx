@@ -9,13 +9,15 @@ export type TaskType = {
 };
 
 type PropsType = {
+  id: string;
   title: string;
   tasks: Array<TaskType>;
   filter: FilterValueType;
-  removeTask: (value: string) => void;
-  changeFilter: (value: FilterValueType) => void;
-  addTask: (title: string) => void;
-  changeStatus: (taskId: string, isDone: boolean) => void;
+  removeTask: (value: string, todoListId: string) => void;
+  changeFilter: (value: FilterValueType, todoListId: string) => void;
+  addTask: (title: string, todoListId: string) => void;
+  changeStatus: (taskId: string, isDone: boolean, todoListId: string) => void;
+  removeTodoList: (taskId: string) => void;
 };
 
 function TodoList(props: PropsType) {
@@ -30,7 +32,7 @@ function TodoList(props: PropsType) {
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     setError(null);
     if (e.key.toLowerCase() === "enter") {
-      props.addTask(newTaskTitle);
+      props.addTask(newTaskTitle, props.id);
 
       setNewTaskTitle("");
     }
@@ -41,19 +43,23 @@ function TodoList(props: PropsType) {
       setError("Title is required");
       return;
     }
-    props.addTask(newTaskTitle);
+    props.addTask(newTaskTitle, props.id);
     setNewTaskTitle("");
   };
 
-  const onClickAll = () => props.changeFilter("all");
-  const onClickActive = () => props.changeFilter("active");
-  const onClickComplited = () => props.changeFilter("completed");
+  const onClickAll = () => props.changeFilter("all", props.id);
+  const onClickActive = () => props.changeFilter("active", props.id);
+  const onClickComplited = () => props.changeFilter("completed", props.id);
 
-  console.log(props.filter);
+  const removeTodoList = () => {
+    props.removeTodoList(props.id);
+  };
 
   return (
     <div>
-      <h3>{toCapitalTitle}</h3>
+      <h3>
+        {toCapitalTitle} <button onClick={removeTodoList}>X</button>
+      </h3>
       <div>
         <input
           className={error ? "error" : ""}
@@ -69,11 +75,11 @@ function TodoList(props: PropsType) {
       <ul>
         {props.tasks.map((task) => {
           const onRemoveHandler = () => {
-            props.removeTask(task.id);
+            props.removeTask(task.id, props.id);
           };
 
           const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            props.changeStatus(task.id, e.currentTarget.checked);
+            props.changeStatus(task.id, e.currentTarget.checked, props.id);
           };
 
           return (
@@ -115,3 +121,31 @@ function TodoList(props: PropsType) {
 }
 
 export default TodoList;
+
+// function AddItemForm(props) {
+//   const [newTaskTitle, setNewTaskTitle] = useState("");
+
+//   const onChangeNewTastTitle = (e: ChangeEvent<HTMLInputElement>) =>
+//     setNewTaskTitle(e.currentTarget.value);
+
+//   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+//     setError(null);
+//     if (e.key.toLowerCase() === "enter") {
+//       props.addTask(newTaskTitle, props.id);
+
+//       setNewTaskTitle("");
+//     }
+//   };
+
+//   <div>
+//     <input
+//       className={error ? "error" : ""}
+//       type="text"
+//       value={newTaskTitle}
+//       onChange={onChangeNewTastTitle}
+//       onKeyDown={onKeyDown}
+//     />
+//     <button onClick={addTask}>+</button>
+//     {error && <p className="error-message">field is requred</p>}
+//   </div>;
+// }
