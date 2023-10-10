@@ -1,7 +1,7 @@
+import { TextField } from "@material-ui/core";
 import { useState, ChangeEvent } from "react";
 
 type EditableStapType = {
-  children: React.ReactNode;
   title: string;
   onChange: (newTitle: string) => void;
 };
@@ -25,7 +25,8 @@ function EditableSpan(props: EditableStapType) {
   };
 
   return editMode ? (
-    <input
+    <TextField
+      size="small"
       value={title}
       onChange={onChangeTitleHandler}
       onBlur={activateViewMode}
@@ -33,7 +34,6 @@ function EditableSpan(props: EditableStapType) {
     />
   ) : (
     <>
-      {props.children}
       <span onDoubleClick={activateEditMode}>{props.title}</span>
     </>
   );
