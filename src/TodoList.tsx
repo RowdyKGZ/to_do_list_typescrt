@@ -77,6 +77,7 @@ function TodoList(props: PropsType) {
               <Checkbox
                 checked={task.isDone}
                 onChange={onChangeStatusHandler}
+                color="primary"
               />
               <EditableSpan
                 title={task.title}

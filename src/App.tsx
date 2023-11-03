@@ -17,13 +17,13 @@ import { Menu } from "@material-ui/icons";
 
 export type FilterValueType = "all" | "completed" | "active";
 
-type TodoListType = {
+export type TodoListType = {
   id: string;
   title: string;
   filter: FilterValueType;
 };
 
-type TasksStateType = {
+export type TasksStateType = {
   [key: string]: Array<TaskType>;
 };
 
@@ -154,7 +154,7 @@ function App() {
             }
 
             return (
-              <Grid item>
+              <Grid key={tl.id} item>
                 <Paper style={{ padding: "20px" }}>
                   <TodoList
                     key={tl.id}
