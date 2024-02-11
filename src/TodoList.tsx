@@ -32,7 +32,6 @@ type PropsType = {
 
 function TodoList(props: PropsType) {
   const toCapitalTitle = props.title[0].toUpperCase() + props.title.slice(1);
-
   const onClickAll = () => props.changeFilter("all", props.id);
   const onClickActive = () => props.changeFilter("active", props.id);
   const onClickComplited = () => props.changeFilter("completed", props.id);
