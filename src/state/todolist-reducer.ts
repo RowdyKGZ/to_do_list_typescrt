@@ -30,11 +30,18 @@ type ActionsTypes =
   | ChangeTitleTodolistType
   | ChangeFilterTodolistType;
 
+export const todoListId1 = v1();
+export const todoListId2 = v1();
+
+const initialSatate: Array<TodoListType> = [
+  { id: todoListId1, title: "What to learn", filter: "all" },
+  { id: todoListId2, title: "What to buy", filter: "all" },
+];
+
 export const todolistReducer = (
-  state: Array<TodoListType>,
+  state: Array<TodoListType> = initialSatate,
   action: ActionsTypes
 ): Array<TodoListType> => {
-  debugger;
   switch (action.type) {
     case "REMOVED-TODOLIST": {
       return state.filter((t1) => t1.id !== action.id);
@@ -60,7 +67,7 @@ export const todolistReducer = (
       return [...state];
     }
     default:
-      throw new Error("I dont know this action type");
+      return state;
   }
 };
 
